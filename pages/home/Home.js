@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import UserAvatar from 'react-native-user-avatar';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+
 import { Container, Contato, Texto, ContainerAvatar, ContainerDados, ContainerHoraNotificacao } from './stylesHome';
 
 const DATA = [
@@ -63,13 +63,32 @@ const DATA = [
 
 
 const Home = ( { navigation } ) => {
+
+    // useLayoutEffect( () => {
+    //     navigation.setOptions( {
+    //         // headerMode: 'none',
+    //         // navigationOptions: {
+    //         //     headerVisible: false,
+    //         // }
+
+    //         // header: ( ...a ) => {
+    //         //     return <AppBarCustom data={ idSala } />;
+    //         // }
+
+    //         // headerTitle: idSala.title || 'Conversa',
+    //         // headerRight: () => (
+    //         //     <SimpleLineIcons name="menu" size={ 20 } color="#fff" />
+    //         // ),
+    //     } );
+    // }, [ navigation, route ] );
     return (
         <Container >
+
             <FlatList
                 data={ DATA }
                 keyExtractor={ item => item.id }
                 renderItem={ ( { item, onPress, style } ) => (
-                    <Contato onPress={ () => navigation.push( 'Conversa', { idSala: item, } ) }>
+                    <Contato onPress={ () => navigation.push( 'Conversa', { dadosSala: item, } ) }>
                         <ContainerAvatar>
                             <UserAvatar name={ item.title } />
                         </ContainerAvatar>

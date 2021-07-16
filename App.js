@@ -27,6 +27,7 @@ export default function App () {
 				<Stack.Screen
 					name="Conversa"
 					component={ ConversaScreen }
+					options={ { headerShown: false } }
 				// options={ ( { route } ) => ( {
 				// 	headerTitle: route.params.idSala.title || 'Conversa',
 				// 	headerRight: () => (
