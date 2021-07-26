@@ -1,22 +1,30 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './pages/home/Home';
-import ConversaScreen from './pages/conversa/Conversa';
-import { Button } from 'react-native';
+import HomeScreen from './src/pages/home/Home';
+import ConversaScreen from './src/pages/conversa/Conversa';
+import WelcomeScreen from './src/pages/welcome/Welcome';
+
 const Stack = createStackNavigator();
 
 export default function App () {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
-				initialRouteName="Home"
+				initialRouteName="Welcome"
 				screenOptions={ {
 					headerTintColor: 'white',
 					headerStyle: { backgroundColor: '#03DAC6' },
 				} }
 			>
+				<Stack.Screen
+					name="Welcome"
+					component={ WelcomeScreen }
+					options={ { headerShown: false } }
+				/>
+
 				<Stack.Screen
 					name="Home"
 					component={ HomeScreen }
