@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Image } from 'react-native';
 
 const { width, height } = Dimensions.get( 'window' );
 export const SLIDE_HEIGHT = 0.61 * height;
@@ -9,9 +9,17 @@ const styles = StyleSheet.create( {
         width
     },
     containerTitle: {
-        // backgroundColor: 'red',
         height: 100,
         justifyContent: 'center',
+    },
+    underlay: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    picture: {
+        height: width - 100,
+        width: width - 100,
 
     },
     title: {
@@ -21,10 +29,9 @@ const styles = StyleSheet.create( {
         color: "#fff",
         textAlign: 'center'
     }
-
 } );
 
-const Slide = ( { title, right } ) => {
+const Slide = ( { title, picture, right } ) => {
     const transform = [
         { translateY: ( SLIDE_HEIGHT - 100 ) / 2 },
         { translateX: right ? ( width / 2 - 30 ) : ( -width / 2 + 30 ) },
@@ -32,6 +39,9 @@ const Slide = ( { title, right } ) => {
     ];
     return (
         <View style={ styles.container }>
+            <View style={ styles.underlay }>
+                <Image source={ picture } style={ styles.picture } />
+            </View>
             <View style={ [ styles.containerTitle, { transform } ] }>
                 <Text style={ styles.title }>{ title }</Text>
             </View>
