@@ -60,7 +60,7 @@ const styles = StyleSheet.create( {
     }
 } );
 
-const Welcome = () => {
+const Welcome = ( { navigation } ) => {
     const scrollRef = useRef( null );
     const color = useSharedValue( slides[ 0 ].color );
     const x = useSharedValue( 0 );
@@ -119,6 +119,8 @@ const Welcome = () => {
                                 onPress={ () => {
                                     if ( scrollRef.current ) {
                                         scrollRef.current.scrollTo( { x: width * ( index + 1 ), animated: true } );
+                                        if ( index === ( slides.length - 1 ) )
+                                            navigation.push( 'Home' );
                                     }
                                 } }
                                 key={ index }

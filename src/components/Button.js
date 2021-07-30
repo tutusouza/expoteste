@@ -16,7 +16,7 @@ const styles = StyleSheet.create( {
 } );
 
 const Button = ( { variant, label, onPress } ) => {
-    const backgroundColor = variant === 'primary' ? '#2CB9B0' : 'rgba(12,13,52, .05)';
+    const backgroundColor = variant === 'primary' ? '#5E4AE3' : 'rgba(12,13,52, .05)';
     const color = variant === 'primary' ? '#fff' : '#0C0D34';
 
     return (

@@ -4,6 +4,10 @@ import { StatusBar } from 'react-native';
 
 export const Container = styled.SafeAreaView`
     flex: 1;
+    padding-Top: 20;
+    background-Color: #fff;
+    border-top-left-radius:20;
+    border-top-right-radius:20;
     /* margin-top: ${ StatusBar.currentHeight || 0 }; */
 `;
 

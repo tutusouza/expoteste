@@ -43,38 +43,12 @@ const styles = StyleSheet.create( {
         flex: 1,
         paddingTop: 20,
         backgroundColor: '#fff',
-        borderRadius: 20
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
 
 } );
 
-function AppBarCustom ( { data } ) {
-    const [ open, setOpen ] = useState( false );
-
-    const tamanhoBar = useMemo( () => {
-        if ( open )
-            return 112;
-        return 56;
-    }, [ open ] );
-
-    return (
-        <SafeAreaView>
-            <StatusBar
-                animated={ true }
-                backgroundColor="#02b7a6"
-            />
-            <View style={ [ styles.container, { height: tamanhoBar } ] }>
-                <View style={ styles.ContainerHead }>
-                    <AntDesign name="arrowleft" size={ 24 } color="black" />
-                    <TouchableOpacity onPress={ () => setOpen( !open ) } >
-                        <Text style={ styles.text }>{ data.title }aaaa</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-        </SafeAreaView>
-    );
-}
 const _tempmensagens = [
     {
         _id: 1,

@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get( 'window' );
 const _heightBodyApp = height - 80;
 const _heightHeadTitle = 56;
-const primaryColor = '#03DAC6';
+const primaryColor = '#5E4AE3';
 const configAnim = {
     damping: 500,
     stiffness: 1000,
@@ -18,6 +18,7 @@ const configAnim = {
     restDisplacementThreshold: 10,
     restSpeedThreshold: 10,
 };
+
 const TopBar = ( { children, data } ) => {
     const [ topBarIsOpen, setTopBarIsOpen ] = useState( false );
     const navigation = useNavigation();
@@ -36,62 +37,41 @@ const TopBar = ( { children, data } ) => {
         }
     };
 
+    const closeOrOpenTopBar = () => {
+        setTopBarIsOpen( old => !old );
+        translateY.value = translateY.value > 0 ?
+            withSpring( 0, configAnim )
+            :
+            withSpring( _heightBodyApp - 100 );
+    };
+
     return (
         <View style={ styles.Container }>
             <View style={ styles.ContainerHeaderPage }>
-                <StatusBar backgroundColor={ "#01af9f" } />
+                <StatusBar backgroundColor={ "#4637a9" } />
                 <View style={ styles.ContainerHeadTitle }>
-                    { !topBarIsOpen ? <TouchableOpacity
-                        style={ styles.InfosContact }
-                        onPress={ () => {
-                            navigation.goBack();
-                        } }
-                    >
-                        <AntDesign name="arrowleft" size={ 24 } color="#fff" />
-                    </TouchableOpacity>
+                    { !topBarIsOpen ?
+                        <TouchableOpacity style={ styles.InfosContact } onPress={ () => navigation.goBack() } >
+                            <AntDesign name="arrowleft" size={ 24 } color="#fff" />
+                        </TouchableOpacity>
                         :
-                        <TouchableOpacity
-                            style={ styles.InfosContact }
-                            onPress={ () => {
-                                translateY.value = withSpring( 0, configAnim );
-                                setTopBarIsOpen( false );
-                            } }
-                        >
+                        <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar }>
                             <AntDesign name="close" size={ 24 } color="#fff" />
-                        </TouchableOpacity> }
-                    <TouchableOpacity
-                        style={ styles.InfosContact }
-                        onPress={ () => {
-
-                            setTopBarIsOpen( old => !old );
-                            translateY.value = translateY.value > 0 ?
-                                withSpring( 0, configAnim )
-                                :
-                                withSpring( _heightBodyApp - 100 );
-                        } }
-                    >
+                        </TouchableOpacity>
+                    }
+                    <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
                         <UserAvatar name={ data.title } style={ styles.avatar } />
                         <Text style={ styles.text }>{ data.title }</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={ styles.ContainerHeadBody }>
-                    <Text style={ styles.text }>Aqui voce verá os dados do usuario</Text>
+                    <Text style={ styles.text }>Aqui voce verá os dados do contato</Text>
                 </View>
             </View>
             <TapGestureHandler onHandlerStateChange={ onSingleTapEvent } numberOfTaps={ 2 }>
                 <Animated.View style={ [ styles.ContainerBodyPage, animateStyles ] } >
                     <View style={ styles.ContainerHeaderPage } >
-                        {/* { !topBarIsOpen && (
-                            <TouchableOpacity
-                                style={ styles.closeTopBarContainer }
-                                onPress={ () => { setTopBarIsOpen( old => !old ); translateY.value = withSpring( 0 ); } }
-                            >
-                                <AntDesign name="doubleright" size={ 16 } color="black" />
-
-                            </TouchableOpacity>
-                        ) } */}
                         { children }
-
                     </View>
                 </Animated.View>
             </TapGestureHandler>
@@ -120,20 +100,25 @@ const styles = StyleSheet.create( {
         justifyContent: 'flex-start',
         alignItems: 'center',
         flexDirection: 'row',
-        padding: 10,
+        paddingHorizontal: 10,
         height: _heightHeadTitle,
     },
     InfosContact: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     text: {
         color: '#fff',
         justifyContent: 'center',
-        fontSize: 22,
+        fontSize: 18,
         letterSpacing: 0.15,
         marginLeft: 10,
+        fontWeight: '600'
     },
     avatar: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
         marginLeft: 10,
     },
     closeTopBarContainer: {

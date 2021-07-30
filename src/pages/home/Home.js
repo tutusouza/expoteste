@@ -3,6 +3,7 @@ import UserAvatar from 'react-native-user-avatar';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
 
 import { Container, Contato, Texto, ContainerAvatar, ContainerDados, ContainerHoraNotificacao } from './stylesHome';
+import TopBar from './TopBar';
 
 const DATA = [
     {
@@ -61,48 +62,30 @@ const DATA = [
     },
 ];
 
-
 const Home = ( { navigation } ) => {
-
-    // useLayoutEffect( () => {
-    //     navigation.setOptions( {
-    //         // headerMode: 'none',
-    //         // navigationOptions: {
-    //         //     headerVisible: false,
-    //         // }
-
-    //         // header: ( ...a ) => {
-    //         //     return <AppBarCustom data={ idSala } />;
-    //         // }
-
-    //         // headerTitle: idSala.title || 'Conversa',
-    //         // headerRight: () => (
-    //         //     <SimpleLineIcons name="menu" size={ 20 } color="#fff" />
-    //         // ),
-    //     } );
-    // }, [ navigation, route ] );
     return (
-        <Container >
-
-            <FlatList
-                data={ DATA }
-                keyExtractor={ item => item.id }
-                renderItem={ ( { item, onPress, style } ) => (
-                    <Contato onPress={ () => navigation.push( 'Conversa', { dadosSala: item, } ) }>
-                        <ContainerAvatar>
-                            <UserAvatar name={ item.title } />
-                        </ContainerAvatar>
-                        <ContainerDados>
-                            <Texto>{ item.title }</Texto>
-                            <Texto numberOfLines={ 1 } style={ styles.textSecundary }>{ item.lastMessage }</Texto>
-                        </ContainerDados>
-                        <ContainerHoraNotificacao>
-                            <Texto style={ styles.textSecundary }>{ item.hourLastMessage }</Texto>
-                        </ContainerHoraNotificacao>
-                    </Contato>
-                ) }
-            />
-        </Container>
+        <TopBar data={ { title: 'Callmed', name: 'Artur Garcia' } } >
+            <Container >
+                <FlatList
+                    data={ DATA }
+                    keyExtractor={ item => item.id }
+                    renderItem={ ( { item, onPress, style } ) => (
+                        <Contato onPress={ () => navigation.push( 'Conversa', { dadosSala: item, } ) }>
+                            <ContainerAvatar>
+                                <UserAvatar name={ item.title } />
+                            </ContainerAvatar>
+                            <ContainerDados>
+                                <Texto>{ item.title }</Texto>
+                                <Texto numberOfLines={ 1 } style={ styles.textSecundary }>{ item.lastMessage }</Texto>
+                            </ContainerDados>
+                            <ContainerHoraNotificacao>
+                                <Texto style={ styles.textSecundary }>{ item.hourLastMessage }</Texto>
+                            </ContainerHoraNotificacao>
+                        </Contato>
+                    ) }
+                />
+            </Container>
+        </TopBar>
     );
 };
 
