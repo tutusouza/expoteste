@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Text, View, StyleSheet, Dimensions, ScrollView, processColor } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, Dimensions, ScrollView, processColor, TextInput } from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -7,32 +7,19 @@ import Animated, {
     withTiming,
     interpolateColor,
 } from 'react-native-reanimated';
-import Slide, { SLIDE_HEIGHT } from './Slide';
-import SubsSlide from './SubsSlide';
-
+import Slide, { SLIDE_HEIGHT } from '../welcome/Slide';
+import SubsSlide from '../welcome/SubsSlide';
+import Button from '../../components/Button';
+import { TitleLogin, InputText } from './StyledLogin';
 const { width } = Dimensions.get('window');
 const BORDER_RADIUS = 75;
 const slides = [
     {
-        title: 'Seguro',
+        title: '',
         color: processColor('#BFEAF5'),
-        subtitle: 'Criptografia 256 bits',
-        description: 'Sua conversa esta segura com uma criotografia de 256 bits.',
-        picture: require('../../images/seguro.png'),
-    },
-    {
-        title: 'Prático',
-        color: processColor('#BEECC4'),
-        subtitle: 'Fale Com Seu Medico',
-        description: 'Suas conversas com seus medicos em um só lugar',
-        picture: require('../../images/pratico.png'),
-    },
-    {
-        title: 'Responsável',
-        color: processColor('#FFE4D9'),
-        subtitle: 'Restrição de Horário',
-        description: 'Bloqueio de horario para o chat, seu medico merece descançar',
-        picture: require('../../images/responsavel.png'),
+        subtitle: '',
+        description: '',
+        picture: require('../../images/login.png'),
     },
 ];
 
@@ -42,7 +29,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     slider: {
-        height: SLIDE_HEIGHT,
+        height: SLIDE_HEIGHT - 90,
         borderBottomRightRadius: BORDER_RADIUS,
     },
     footer: {
@@ -52,18 +39,20 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     footerContent: {
+        justifyContent: 'flex-start',
+        padding: 40,
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#fff',
         borderTopLeftRadius: BORDER_RADIUS,
         overflow: 'hidden',
     },
 });
 
-const Welcome = ({ navigation }) => {
+const Login = ({ navigation }) => {
     const scrollRef = useRef(null);
     const x = useSharedValue(0);
-
+    const [login, setLogin] = useState('');
     const scrollHandler = useAnimatedScrollHandler({
         onScroll: (event) => {
             // console.log( event.contentOffset.x );
@@ -102,7 +91,7 @@ const Welcome = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Animated.View style={[styles.slider, styleAnimatedColor1]}>
+            <Animated.View style={[styles.slider, styleAnimatedColor1, { backgroundColor: '#9898' }]}>
                 <Animated.ScrollView
                     ref={scrollRef}
                     horizontal
@@ -119,15 +108,37 @@ const Welcome = ({ navigation }) => {
                 </Animated.ScrollView>
             </Animated.View>
             <View style={styles.footer}>
-                <Animated.View style={[styles.background, styleAnimatedColor2]} />
+                {/* <Animated.View style={[styles.background, styleAnimatedColor2]} /> */}
                 <View style={[styles.footerContent]}>
-                    <Animated.View style={[styleAnimatedFooter, { width: width * slides.length, flex: 1, flexDirection: 'row' }]}>
+                    {/* <View style={{ flex: 1, backgroundColor: 'red', padding: 40 }}> */}
+                    <TitleLogin>Usuário</TitleLogin>
+                    <InputText value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Login" />
+                    <TitleLogin>Senha</TitleLogin>
+                    <InputText value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Senha" />
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Button
+                            onPress={() => {
+                                navigation.push('Home');
+                            }}
+                            label="Acessar"
+                            variant="primary"
+                        />
+                    </View>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+export default Login;
+/*
+<Animated.View style={[styleAnimatedFooter, { width: width * slides.length, flex: 1, flexDirection: 'row' }]}>
                         {slides.map(({ subtitle, description }, index) => (
                             <SubsSlide
                                 onPress={() => {
                                     if (scrollRef.current) {
                                         scrollRef.current.scrollTo({ x: width * (index + 1), animated: true });
-                                        if (index === slides.length - 1) navigation.push('Login');
+                                        if (index === slides.length - 1) navigation.push('Home');
                                     }
                                 }}
                                 key={index}
@@ -136,10 +147,5 @@ const Welcome = ({ navigation }) => {
                             />
                         ))}
                     </Animated.View>
-                </View>
-            </View>
-        </View>
-    );
-};
 
-export default Welcome;
+*/
