@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, Text, StatusBar, Image, TouchableOpacity } from 'react-native';
-import { PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
-import { AntDesign } from '@expo/vector-icons';
+import { View, Dimensions, Text, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
+import styles, { _heightBodyApp } from './stylesTopBar';
+import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Foundation } from '@expo/vector-icons';
 import UserAvatar from 'react-native-user-avatar';
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get( 'window' );
-const _heightBodyApp = height - 80;
-const _heightHeadTitle = 56;
-const primaryColor = '#5E4AE3';
 const configAnim = {
     damping: 500,
     stiffness: 1000,
@@ -23,15 +20,22 @@ const TopBar = ( { children, data } ) => {
     const [ topBarIsOpen, setTopBarIsOpen ] = useState( false );
     const navigation = useNavigation();
     const translateY = useSharedValue( 0 );
+    const opacity = useSharedValue( 1 );
 
-    const animateStyles = useAnimatedStyle( () => ( {
+    const animateTranslateYBody = useAnimatedStyle( () => ( {
         transform: [ { translateY: translateY.value } ]
     } ) );
 
-    const onSingleTapEvent = ( event ) => {
+    const animateOpacienty = useAnimatedStyle( () => ( {
+        opacity: opacity.value
+    } ) );
+
+
+    const onDubleTapEvent = ( event ) => {
         if ( event.nativeEvent.state === State.ACTIVE ) {
             if ( topBarIsOpen ) {
                 translateY.value = withSpring( 0, configAnim );
+                opacity.value = withSpring( 1, configAnim );
                 setTopBarIsOpen( false );
             }
         }
@@ -39,37 +43,155 @@ const TopBar = ( { children, data } ) => {
 
     const closeOrOpenTopBar = () => {
         setTopBarIsOpen( old => !old );
-        translateY.value = translateY.value > 0 ?
-            withSpring( 0, configAnim )
-            :
-            withSpring( _heightBodyApp - 100 );
+        if ( translateY.value > 0 ) {
+            translateY.value = withSpring( 0, configAnim );
+            opacity.value = withSpring( 1, configAnim );
+        } else {
+            translateY.value = withSpring( _heightBodyApp - 100 );
+            opacity.value = withSpring( 0, configAnim );
+        }
     };
 
     return (
         <View style={ styles.Container }>
+            <StatusBar backgroundColor={ "#4637a9" } />
             <View style={ styles.ContainerHeaderPage }>
-                <StatusBar backgroundColor={ "#4637a9" } />
                 <View style={ styles.ContainerHeadTitle }>
-                    { !topBarIsOpen ?
-                        <TouchableOpacity style={ styles.InfosContact } onPress={ () => navigation.goBack() } >
-                            <AntDesign name="arrowleft" size={ 24 } color="#fff" />
-                        </TouchableOpacity>
+                    { topBarIsOpen ?
+                        <>
+                            <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar }>
+                                <AntDesign name="close" size={ 24 } color="#fff" />
+                            </TouchableOpacity>
+                        </>
                         :
-                        <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar }>
-                            <AntDesign name="close" size={ 24 } color="#fff" />
-                        </TouchableOpacity>
+                        <>
+                            <TouchableOpacity onPress={ () => navigation.goBack() } >
+                                <AntDesign name="arrowleft" size={ 24 } color="#fff" />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
+                                <UserAvatar
+                                    name={ `${ data.first_name } ${ data.last_name }` }
+                                    src={ data.photo }
+                                    style={ styles.avatar }
+                                />
+                                <Text style={ styles.text }>
+                                    { `${ data.gender === "F" ? "Dra." : "Dr." } ${ data.first_name } ${ data.last_name }` }
+                                </Text>
+                            </TouchableOpacity>
+
+                            <View style={ styles.containerOptions }>
+                                <TouchableOpacity style={ styles.marginHorizontalT }  >
+                                    <Foundation name="alert" size={ 24 } color="#fff" />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={ closeOrOpenTopBar } >
+                                    <SimpleLineIcons name="options-vertical" size={ 24 } color="#fff" />
+                                </TouchableOpacity>
+                            </View>
+                        </>
                     }
-                    <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
-                        <UserAvatar name={ data.title } style={ styles.avatar } />
-                        <Text style={ styles.text }>{ data.title }</Text>
-                    </TouchableOpacity>
                 </View>
+
                 <View style={ styles.ContainerHeadBody }>
-                    <Text style={ styles.text }>Aqui voce verá os dados do contato</Text>
+                    <ScrollView style={ styles.HeadBody }>
+                        <View style={ { alignItems: 'center', paddingTop: 25 } }>
+                            <View style={ styles.containerAvatarXL }>
+                                <UserAvatar
+                                    name={ `${ data.first_name } ${ data.last_name }` }
+                                    size={ 80 }
+                                    borderRadius={ 40 }
+                                    src={ data.photo }
+                                />
+                            </View>
+                            <Text style={ styles.myName }>{ `${ data.gender === "F" ? "Dra." : "Dr." } ${ data.first_name } ${ data.last_name }` }</Text>
+                        </View>
+
+                        <View style={ styles.containerCallOptions }>
+
+                            <TouchableOpacity style={ styles.itemContainerCallOptions }>
+                                <View style={ styles.containerIconeItemMenu }>
+                                    <Foundation name="alert" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                                </View>
+                                <View style={ styles.containerTextoItemMenu }>
+                                    <Text style={ styles.textoItemMenu }>Alerta </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={ styles.itemContainerCallOptions }>
+                                <View style={ styles.containerIconeItemMenu }>
+                                    <MaterialCommunityIcons name="video" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+
+                                </View>
+                                <View style={ styles.containerTextoItemMenu }>
+                                    <Text style={ styles.textoItemMenu }>Video </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={ styles.itemContainerCallOptions }>
+                                <View style={ styles.containerIconeItemMenu }>
+                                    <MaterialCommunityIcons name="bell" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                                </View>
+                                <View style={ styles.containerTextoItemMenu }>
+                                    <Text style={ styles.textoItemMenu }>Silenciar </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <AntDesign name="picture" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Fotos, vídeos e documentos </Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <AntDesign name="search1" size={ 24 } color="black" color="#fff" style={ styles.iconeItemMenu } />
+
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Procurar na conversa</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <MaterialCommunityIcons name="bell-outline" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Sons e notificações</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <AntDesign name="lock" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Bloquear contato</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <MaterialCommunityIcons name="trash-can-outline" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Excluir contato</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={ styles.itemMenu }>
+                            <View style={ styles.containerIconeItemMenu }>
+                                <AntDesign name="dislike2" size={ 24 } color="#fff" style={ styles.iconeItemMenu } />
+                            </View>
+                            <View style={ styles.containerTextoItemMenu }>
+                                <Text style={ styles.textoItemMenu }>Denunciar contato</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </View>
             </View>
-            <TapGestureHandler onHandlerStateChange={ onSingleTapEvent } numberOfTaps={ 2 }>
-                <Animated.View style={ [ styles.ContainerBodyPage, animateStyles ] } >
+
+
+            <TapGestureHandler onHandlerStateChange={ onDubleTapEvent } numberOfTaps={ 2 }>
+                <Animated.View style={ [ styles.ContainerBodyPage, animateTranslateYBody ] } >
                     <View style={ styles.ContainerHeaderPage } >
                         { children }
                     </View>
@@ -80,58 +202,5 @@ const TopBar = ( { children, data } ) => {
 };
 
 export default TopBar;
-
-const styles = StyleSheet.create( {
-    Container: {
-        flex: 1,
-        backgroundColor: primaryColor,
-    },
-    ContainerBodyPage: {
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: _heightBodyApp,
-    },
-    ContainerHeaderPage: {
-        flex: 1
-    },
-    ContainerHeadTitle: {
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingHorizontal: 10,
-        height: _heightHeadTitle,
-    },
-    InfosContact: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    text: {
-        color: '#fff',
-        justifyContent: 'center',
-        fontSize: 18,
-        letterSpacing: 0.15,
-        marginLeft: 10,
-        fontWeight: '600'
-    },
-    avatar: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        marginLeft: 10,
-    },
-    closeTopBarContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-
-    ContainerHeadBody: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1
-    },
-} );
 
 

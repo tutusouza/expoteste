@@ -6,7 +6,7 @@ import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 import TopBar from './TopBar';
 
 const Conversa = ( { route, navigation } ) => {
-    const { dadosSala } = route.params;
+    const { dadosContato, me } = route.params;
     const [ messages, setMessages ] = useState( [] );
 
     useEffect( () => {
@@ -18,7 +18,7 @@ const Conversa = ( { route, navigation } ) => {
     }, [] );
 
     return (
-        <TopBar data={ dadosSala }>
+        <TopBar data={ dadosContato }>
             <View style={ styles.ContainerMensagens }>
                 <GiftedChat
                     messages={ messages.map( ( item, index ) => ( { ...item, _id: index } ) ) }
@@ -26,8 +26,8 @@ const Conversa = ( { route, navigation } ) => {
                     placeholder="Escreva aqui..."
                     user={ {
                         _id: 1,
-                        name: 'Artur Garia',
-                        avatar: 'https://placeimg.com/140/140/any',
+                        name: `${ me.first_name } ${ me.last_name }`,
+                        avatar: me.id.photo,
                     } }
                 />
             </View>

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions, Text, StatusBar, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
-import { AntDesign, SimpleLineIcons, MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, SimpleLineIcons, MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import UserAvatar from 'react-native-user-avatar';
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get( 'window' );
-const _heightBodyApp = height - 80;
 const _heightHeadTitle = 56;
+const _heightBodyApp = height - _heightHeadTitle;
 // const primaryColor = '#559CAD';
 // const primaryColor = '#0D2149';
 // const primaryColor = '#22333B';
@@ -25,6 +25,7 @@ const configAnim = {
     restDisplacementThreshold: 10,
     restSpeedThreshold: 10,
 };
+const logoMedGran = require( '../../images/medgran.png' );
 
 const TopBar = ( { children, data } ) => {
     const [ topBarIsOpen, setTopBarIsOpen ] = useState( false );
@@ -71,11 +72,15 @@ const TopBar = ( { children, data } ) => {
                     { !topBarIsOpen &&
                         <>
                             <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
-                                <UserAvatar name={ data.name } style={ styles.avatar } />
-                                <Text style={ styles.text }>{ data.title }</Text>
+                                <View style={ styles.ContainerLogo } >
+                                    <Image source={ logoMedGran } style={ { flex: 1, resizeMode: 'contain' } } />
+                                </View>
                             </TouchableOpacity>
 
 
+                            <TouchableOpacity style={ [ styles.optionButtom, styles.marginHorizontalT ] } onPress={ closeOrOpenTopBar } >
+                                <FontAwesome name="search" size={ 24 } color="#fff" />
+                            </TouchableOpacity>
                             <TouchableOpacity style={ styles.optionButtom } onPress={ closeOrOpenTopBar } >
                                 <SimpleLineIcons name="options-vertical" size={ 24 } color="#fff" />
                             </TouchableOpacity>
@@ -84,13 +89,19 @@ const TopBar = ( { children, data } ) => {
                 </View>
 
                 <View style={ styles.ContainerHeadBody }>
-                    <ScrollView style={ { flex: 1, height: '100%' } }>
+                    <ScrollView style={ { flex: 1, height: '100%', } }>
 
-                        <View style={ { alignItems: 'center', paddingTop: 20 } }>
+                        <View style={ { alignItems: 'center', paddingTop: 25 } }>
                             <View style={ styles.containerAvatarXL }>
-                                <UserAvatar name={ data.name } style={ styles.avatarXL } />
+                                <UserAvatar
+                                    name={ `${ data.first_name } ${ data.last_name }` }
+                                    src={ data.photo }
+                                    // style={ styles.avatarXL }
+                                    size={ 80 }
+                                    borderRadius={ 40 }
+                                />
                             </View>
-                            <Text style={ styles.myName }>{ data.name }</Text>
+                            <Text style={ styles.myName }>{ `${ data.first_name } ${ data.last_name }` }</Text>
                         </View>
 
                         <TouchableOpacity style={ styles.itemMenu }>
@@ -167,6 +178,9 @@ const TopBar = ( { children, data } ) => {
 export default TopBar;
 
 const styles = StyleSheet.create( {
+    marginHorizontalT: {
+        marginHorizontal: 5,
+    },
     Container: {
         flex: 1,
         backgroundColor: primaryColor,
@@ -188,6 +202,13 @@ const styles = StyleSheet.create( {
         flexDirection: 'row',
         paddingHorizontal: 10,
         height: _heightHeadTitle,
+    },
+    ContainerLogo: {
+        height: _heightHeadTitle - 20,
+        width: 170,
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'red',
     },
     closeButtom: {
         flexDirection: 'row',
@@ -223,7 +244,6 @@ const styles = StyleSheet.create( {
         flexDirection: 'row',
         flex: 1,
         paddingBottom: 100,
-        // backgroundColor: 'red',
     },
 
     containerAvatarXL: {

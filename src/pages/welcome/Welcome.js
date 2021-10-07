@@ -1,35 +1,35 @@
 import React, { useRef } from 'react';
-import { Text, View, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, ScrollView, processColor } from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
     useAnimatedScrollHandler,
     withTiming,
+    interpolateColor
 } from 'react-native-reanimated';
 import Slide, { SLIDE_HEIGHT } from './Slide';
 import SubsSlide from './SubsSlide';
-
 
 const { width } = Dimensions.get( 'window' );
 const BORDER_RADIUS = 75;
 const slides = [
     {
         title: 'Seguro',
-        color: '#BFEAF5',
+        color: processColor( "#BFEAF5" ),
         subtitle: 'Criptografia 256 bits',
         description: 'Sua conversa esta segura com uma criotografia de 256 bits.',
         picture: require( '../../images/seguro.png' )
     },
     {
         title: 'Prático',
-        color: '#BEECC4',
+        color: processColor( "#BEECC4" ),
         subtitle: 'Fale Com Seu Medico',
         description: 'Suas conversas com seus medicos em um só lugar',
         picture: require( '../../images/pratico.png' )
     },
     {
         title: 'Responsável',
-        color: '#FFE4D9',
+        color: processColor( "#FFE4D9" ),
         subtitle: 'Restrição de Horário',
         description: 'Bloqueio de horario para o chat, seu medico merece descançar',
         picture: require( '../../images/responsavel.png' )
@@ -62,7 +62,6 @@ const styles = StyleSheet.create( {
 
 const Welcome = ( { navigation } ) => {
     const scrollRef = useRef( null );
-    const color = useSharedValue( slides[ 0 ].color );
     const x = useSharedValue( 0 );
 
     const scrollHandler = useAnimatedScrollHandler( {
@@ -70,13 +69,26 @@ const Welcome = ( { navigation } ) => {
             // console.log( event.contentOffset.x );
             const index = Math.round( event.contentOffset.x / width );
             x.value = event.contentOffset.x;
-            color.value = slides[ index ].color;
         },
     } );
 
-    const styleAnimated = useAnimatedStyle( () => ( {
-        backgroundColor: withTiming( color.value )
-    } ) );
+    const styleAnimatedColor1 = useAnimatedStyle( () => {
+        const backgroundColor = interpolateColor(
+            x.value,
+            slides.map( ( _, i ) => width * i ),
+            slides.map( i => i.color )
+        );
+        return { backgroundColor };
+    } );
+
+    const styleAnimatedColor2 = useAnimatedStyle( () => {
+        const backgroundColor = interpolateColor(
+            x.value,
+            slides.map( ( _, i ) => width * i ),
+            slides.map( i => i.color )
+        );
+        return { backgroundColor };
+    } );
 
     const styleAnimatedFooter = useAnimatedStyle( () => {
         return {
@@ -88,13 +100,9 @@ const Welcome = ( { navigation } ) => {
         };
     } );
 
-    const styleAnimated2 = useAnimatedStyle( () => ( {
-        backgroundColor: withTiming( color.value )
-    } ) );
-
     return (
         <View style={ styles.container }>
-            <Animated.View style={ [ styles.slider, styleAnimated ] }>
+            <Animated.View style={ [ styles.slider, styleAnimatedColor1 ] }>
                 <Animated.ScrollView
                     ref={ scrollRef }
                     horizontal
@@ -111,7 +119,7 @@ const Welcome = ( { navigation } ) => {
                 </Animated.ScrollView>
             </Animated.View>
             <View style={ styles.footer }>
-                <Animated.View style={ [ styles.background, styleAnimated2 ] } />
+                <Animated.View style={ [ styles.background, styleAnimatedColor2 ] } />
                 <View style={ [ styles.footerContent ] }>
                     <Animated.View style={ [ styleAnimatedFooter, { width: width * slides.length, flex: 1, flexDirection: 'row' } ] }>
                         { slides.map( ( { subtitle, description }, index ) => (
