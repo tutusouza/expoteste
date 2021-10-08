@@ -24,7 +24,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         mode="card"
-        initialRouteName="Welcome"
+        initialRouteName="Signup"
         screenOptions={{
           headerTintColor: "white",
           headerStyle: { backgroundColor: "#5E4AE3" },
@@ -76,11 +76,11 @@ export default function App() {
           component={Login}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Signup"
           component={Signup}
           options={{ headerShown: false }}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
