@@ -4,11 +4,19 @@ import { TitleLogin, InputText } from './StyledInputText';
 
 const InputTextComponent = ({ label }) => {
     const [string, setString] = useState('');
+    const [focus, setFocus] = useState(false);
 
     return (
-        <View style={{ marginBottom: 10, marginTop: 10 }}>
-            <TitleLogin>{label}</TitleLogin>
-            <InputText value={string} onChange={(event) => setString(event.target.value)} placeholder={label} />
+        <View style={{ marginTop: 10 }}>
+            <TitleLogin focus={focus}>{label}</TitleLogin>
+            <InputText
+                onBlur={() => setFocus(false)}
+                onFocus={() => setFocus(true)}
+                value={string}
+                focus={focus}
+                onChange={(event) => setString(event.target.value)}
+                placeholder={label}
+            />
         </View>
     );
 };
