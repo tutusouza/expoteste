@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         paddingRight: 40,
         paddingLeft: 40,
         paddingTop: 40,
-        paddingBottom: 100,
+        paddingBottom: 70,
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#fff',
@@ -92,7 +92,7 @@ const Login = ({ navigation }) => {
                     <View style={styles.footerContent}>
                         <InputTextComponent label="Login" />
                         <InputTextComponent label="Senha" />
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5, marginTop: 5 }}>
                             <Button
                                 onPress={() => {
                                     navigation.push('Welcome');
@@ -100,6 +100,20 @@ const Login = ({ navigation }) => {
                                 label="Acessar"
                                 variant="primary"
                             />
+                        </View>
+                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>Não possui uma conta ?</Text>
+                            <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Text
+                                    style={{ color: '#5E4AE3', marginRight: 3, textDecorationLine: 'underline' }}
+                                    onPress={() => {
+                                        navigation.push('Signup');
+                                    }}
+                                >
+                                    Clique aqui
+                                </Text>
+                                <Text>para se cadastrar</Text>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
