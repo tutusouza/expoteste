@@ -51,7 +51,10 @@ const styles = StyleSheet.create({
     },
     footerContent: {
         justifyContent: 'flex-start',
-        padding: 40,
+        paddingRight: 40,
+        paddingLeft: 40,
+        paddingTop: 40,
+        paddingBottom: 100,
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#fff',
@@ -76,19 +79,30 @@ const Login = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.footer}>
-                <View style={[styles.footerContent]}>
-                    <InputTextComponent label="Login" />
-                    <InputTextComponent label="Senha" />
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Button
-                            onPress={() => {
-                                navigation.push('Welcome');
-                            }}
-                            label="Acessar"
-                            variant="primary"
-                        />
+                <ScrollView
+                    style={{
+                        flex: 1,
+                        bottom: 0,
+                        position: 'absolute',
+                        right: 0,
+
+                        width: width,
+                    }}
+                >
+                    <View style={styles.footerContent}>
+                        <InputTextComponent label="Login" />
+                        <InputTextComponent label="Senha" />
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Button
+                                onPress={() => {
+                                    navigation.push('Welcome');
+                                }}
+                                label="Acessar"
+                                variant="primary"
+                            />
+                        </View>
                     </View>
-                </View>
+                </ScrollView>
             </View>
         </View>
     );
