@@ -1,32 +1,43 @@
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, Dimensions, ScrollView, processColor, TextInput } from 'react-native';
-import Animated, {
-    useSharedValue,
-    useAnimatedStyle,
-    useAnimatedScrollHandler,
-    withTiming,
-    interpolateColor,
-} from 'react-native-reanimated';
-import Slide, { SLIDE_HEIGHT } from '../welcome/Slide';
-import SubsSlide from '../welcome/SubsSlide';
+import React from 'react';
+import { View, StyleSheet, Dimensions, ScrollView, processColor, TextInput, Image, Text } from 'react-native';
+import InputTextComponent from '../../components/InputText/InputText';
 import Button from '../../components/Button';
-import { TitleLogin, InputText } from './StyledLogin';
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+export const SLIDE_HEIGHT = 0.61 * height;
 const BORDER_RADIUS = 75;
-const slides = [
-    {
-        title: '',
-        color: processColor('#BFEAF5'),
-        subtitle: '',
-        description: '',
-        picture: require('../../images/login.png'),
+
+const stylesSlider = StyleSheet.create({
+    container: {
+        width,
+        height: width,
+        backgroundColor: '#BFEAF5',
     },
-];
+    containerTitle: {
+        height: 100,
+        justifyContent: 'center',
+    },
+    underlay: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    picture: {
+        height: width - 100,
+        width: width - 100,
+    },
+    title: {
+        fontSize: 50,
+        lineHeight: 50,
+        fontWeight: '700',
+        color: '#fff',
+        textAlign: 'center',
+    },
+});
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#BFEAF5',
     },
     slider: {
         height: SLIDE_HEIGHT - 90,
@@ -49,76 +60,29 @@ const styles = StyleSheet.create({
     },
 });
 
+const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }, { translateX: -width / 2 + 30 }, { rotate: '90deg' }];
+
 const Login = ({ navigation }) => {
-    const scrollRef = useRef(null);
-    const x = useSharedValue(0);
-    const [login, setLogin] = useState('');
-    const scrollHandler = useAnimatedScrollHandler({
-        onScroll: (event) => {
-            // console.log( event.contentOffset.x );
-            const index = Math.round(event.contentOffset.x / width);
-            x.value = event.contentOffset.x;
-        },
-    });
-
-    const styleAnimatedColor1 = useAnimatedStyle(() => {
-        const backgroundColor = interpolateColor(
-            x.value,
-            slides.map((_, i) => width * i),
-            slides.map((i) => i.color),
-        );
-        return { backgroundColor };
-    });
-
-    const styleAnimatedColor2 = useAnimatedStyle(() => {
-        const backgroundColor = interpolateColor(
-            x.value,
-            slides.map((_, i) => width * i),
-            slides.map((i) => i.color),
-        );
-        return { backgroundColor };
-    });
-
-    const styleAnimatedFooter = useAnimatedStyle(() => {
-        return {
-            transform: [
-                {
-                    translateX: x.value * -1,
-                },
-            ],
-        };
-    });
-
     return (
         <View style={styles.container}>
-            <Animated.View style={[styles.slider, styleAnimatedColor1, { backgroundColor: '#9898' }]}>
-                <Animated.ScrollView
-                    ref={scrollRef}
-                    horizontal
-                    snapToInterval={width}
-                    decelerationRate="fast"
-                    showsHorizontalScrollIndicator={false}
-                    bounces={false}
-                    scrollEventThrottle={1}
-                    onScroll={scrollHandler}
-                >
-                    {slides.map(({ title, picture, subtitle }, index) => (
-                        <Slide key={index} right={!!(index % 2)} {...{ title, picture }} />
-                    ))}
-                </Animated.ScrollView>
-            </Animated.View>
+            <View style={{ ...styles.slider, backgroundColor: '#BFEAF5' }}>
+                <View style={stylesSlider.container}>
+                    <View style={stylesSlider.underlay}>
+                        <Image source={require('../../images/login.png')} style={stylesSlider.picture} />
+                    </View>
+                    <View style={[stylesSlider.containerTitle, { transform }]}>
+                        <Text style={stylesSlider.title}>Login</Text>
+                    </View>
+                </View>
+            </View>
             <View style={styles.footer}>
-                {/* <Animated.View style={[styles.background, styleAnimatedColor2]} /> */}
                 <View style={[styles.footerContent]}>
-                    {/* <View style={{ flex: 1, backgroundColor: 'red', padding: 40 }}> */}
-                    <TitleLogin>Usuário</TitleLogin>
-                    <InputText value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Login" />
-                    <TitleLogin>Senha</TitleLogin>
-                    <InputText value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Senha" />
+                    <InputTextComponent label="Login" />
+                    <InputTextComponent label="Senha" />
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Button
                             onPress={() => {
-                                navigation.push('Home');
+                                navigation.push('Welcome');
                             }}
                             label="Acessar"
                             variant="primary"
@@ -131,21 +95,3 @@ const Login = ({ navigation }) => {
 };
 
 export default Login;
-/*
-<Animated.View style={[styleAnimatedFooter, { width: width * slides.length, flex: 1, flexDirection: 'row' }]}>
-                        {slides.map(({ subtitle, description }, index) => (
-                            <SubsSlide
-                                onPress={() => {
-                                    if (scrollRef.current) {
-                                        scrollRef.current.scrollTo({ x: width * (index + 1), animated: true });
-                                        if (index === slides.length - 1) navigation.push('Home');
-                                    }
-                                }}
-                                key={index}
-                                last={index === slides.length - 1}
-                                {...{ subtitle, description }}
-                            />
-                        ))}
-                    </Animated.View>
-
-*/
