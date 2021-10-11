@@ -95,7 +95,7 @@ const Login = ({ navigation }) => {
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5, marginTop: 5 }}>
                             <Button
                                 onPress={() => {
-                                    navigation.push('Welcome');
+                                    navigation.push('Home');
                                 }}
                                 label="Acessar"
                                 variant="primary"
@@ -105,7 +105,12 @@ const Login = ({ navigation }) => {
                             <Text>Não possui uma conta ?</Text>
                             <View style={{ display: 'flex', flexDirection: 'row' }}>
                                 <Text
-                                    style={{ color: '#5E4AE3', marginRight: 3, textDecorationLine: 'underline' }}
+                                    style={{
+                                        color: '#5E4AE3',
+                                        marginRight: 3,
+                                        textDecorationLine: 'underline',
+                                        fontWeight: 'bold',
+                                    }}
                                     onPress={() => {
                                         navigation.push('Signup');
                                     }}
