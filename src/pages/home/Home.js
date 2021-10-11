@@ -4,6 +4,8 @@ import { FlatList, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Container, Contato, Texto, ContainerAvatar, ContainerDados, ContainerHoraNotificacao, Avatar } from './stylesHome';
 import TopBar from './TopBar';
+
+import relativeTime from '../../helpers/relativeTime';
 // import UserAvatar from 'react-native-user-avatar';
 
 const Home = ({ navigation }) => {
@@ -47,7 +49,9 @@ const Home = ({ navigation }) => {
                                 </Texto>
                             </ContainerDados>
                             <ContainerHoraNotificacao>
-                                <Texto style={styles.textSecundary}>{item.timeLastMessage}</Texto>
+                                <Texto style={[styles.textSecundary, { lineHeight: 12 }]}>
+                                    {relativeTime(item.timeLastMessage)}
+                                </Texto>
                                 <Texto style={styles.textSecundary}>
                                     {item.gender === 'M' ? (
                                         <FontAwesome5 name="check" size={12} />
@@ -69,6 +73,7 @@ export default Home;
 const styles = StyleSheet.create({
     textSecundary: {
         fontSize: 12,
+        lineHeight: 16,
         color: '#757575',
     },
 });
