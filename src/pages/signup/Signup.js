@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 });
 const transform = [{ translateY: (TAMANHO_CONTAINER_IMAGEM - 100) / 2 }, { translateX: -width / 2 + 30 }, { rotate: '90deg' }];
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={{ ...styles.slider }}>
@@ -91,7 +91,7 @@ const Signup = () => {
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                             <Button
                                 onPress={() => {
-                                    navigation.push('Welcome');
+                                    navigation.push('Login');
                                 }}
                                 label="Cadastrar"
                                 variant="primary"
