@@ -18,5 +18,5 @@ export const InputText = styled.TextInput`
     border-top-width: 0;
     border-right-width: 0;
     border-left-width: 0;
-    border-color: ${(p) => (!p.focus ? '#333333' : '#5E4AE3')};
+    border-color: ${(p) => (!p.focus ? '#cecece' : '#5E4AE3')};
 `;
