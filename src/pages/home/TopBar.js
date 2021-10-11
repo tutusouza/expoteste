@@ -6,9 +6,9 @@ import UserAvatar from 'react-native-user-avatar';
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get( 'window' );
+const { width, height } = Dimensions.get('window');
 const _heightHeadTitle = 56;
-const _heightBodyApp = height - _heightHeadTitle;
+const _heightBodyApp = height - _heightHeadTitle - 20;
 // const primaryColor = '#559CAD';
 // const primaryColor = '#0D2149';
 // const primaryColor = '#22333B';
@@ -25,150 +25,147 @@ const configAnim = {
     restDisplacementThreshold: 10,
     restSpeedThreshold: 10,
 };
-const logoMedGran = require( '../../images/medgran.png' );
+const logoMedGran = require('../../images/medgran.png');
 
-const TopBar = ( { children, data } ) => {
-    const [ topBarIsOpen, setTopBarIsOpen ] = useState( false );
+const TopBar = ({ children, data }) => {
+    const [topBarIsOpen, setTopBarIsOpen] = useState(false);
     const navigation = useNavigation();
-    const translateY = useSharedValue( 0 );
+    const translateY = useSharedValue(0);
 
-    const animateStyles = useAnimatedStyle( () => ( {
-        transform: [ { translateY: translateY.value } ]
-    } ) );
+    const animateStyles = useAnimatedStyle(() => ({
+        transform: [{ translateY: translateY.value }],
+    }));
 
-    const onSingleTapEvent = ( event ) => {
-        if ( event.nativeEvent.state === State.ACTIVE ) {
-            if ( topBarIsOpen ) {
-                translateY.value = withSpring( 0, configAnim );
-                setTopBarIsOpen( false );
+    const onSingleTapEvent = (event) => {
+        if (event.nativeEvent.state === State.ACTIVE) {
+            if (topBarIsOpen) {
+                translateY.value = withSpring(0, configAnim);
+                setTopBarIsOpen(false);
             }
         }
     };
 
     const closeOrOpenTopBar = () => {
-        setTopBarIsOpen( old => !old );
-        translateY.value = translateY.value > 0 ?
-            withSpring( 0, configAnim )
-            :
-            withSpring( _heightBodyApp - 100 );
+        setTopBarIsOpen((old) => !old);
+        translateY.value = translateY.value > 0 ? withSpring(0, configAnim) : withSpring(_heightBodyApp - 100);
     };
 
     return (
-        <View style={ styles.Container }>
-            <View style={ styles.ContainerHeaderPage }>
-                <StatusBar backgroundColor={ topBarColor } />
-                <View style={ styles.ContainerHeadTitle }>
-                    { topBarIsOpen &&
+        <View style={styles.Container}>
+            <View style={styles.ContainerHeaderPage}>
+                <StatusBar backgroundColor={topBarColor} />
+                <View style={styles.ContainerHeadTitle}>
+                    {topBarIsOpen && (
                         <>
-                            <TouchableOpacity style={ styles.closeButtom } onPress={ closeOrOpenTopBar } >
-                                <AntDesign name="close" size={ 24 } color="#fff" />
+                            <TouchableOpacity style={styles.closeButtom} onPress={closeOrOpenTopBar}>
+                                <AntDesign name="close" size={24} color="#fff" />
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
-                                <Text style={ styles.text }>Minhas Configurações</Text>
+                            <TouchableOpacity style={styles.InfosContact} onPress={closeOrOpenTopBar}>
+                                <Text style={styles.text}>Minhas Configurações</Text>
                             </TouchableOpacity>
                         </>
-                    }
-                    { !topBarIsOpen &&
+                    )}
+                    {!topBarIsOpen && (
                         <>
-                            <TouchableOpacity style={ styles.InfosContact } onPress={ closeOrOpenTopBar } >
-                                <View style={ styles.ContainerLogo } >
-                                    <Image source={ logoMedGran } style={ { flex: 1, resizeMode: 'contain' } } />
+                            <TouchableOpacity style={styles.InfosContact} onPress={closeOrOpenTopBar}>
+                                <View style={styles.ContainerLogo}>
+                                    <Image source={logoMedGran} style={{ flex: 1, resizeMode: 'contain' }} />
                                 </View>
                             </TouchableOpacity>
 
-
-                            <TouchableOpacity style={ [ styles.optionButtom, styles.marginHorizontalT ] } onPress={ closeOrOpenTopBar } >
-                                <FontAwesome name="search" size={ 24 } color="#fff" />
+                            <TouchableOpacity style={[styles.optionButtom, styles.marginHorizontalT]} onPress={closeOrOpenTopBar}>
+                                <FontAwesome name="search" size={24} color="#fff" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={ styles.optionButtom } onPress={ closeOrOpenTopBar } >
-                                <SimpleLineIcons name="options-vertical" size={ 24 } color="#fff" />
+                            <TouchableOpacity style={styles.optionButtom} onPress={closeOrOpenTopBar}>
+                                <SimpleLineIcons name="options-vertical" size={24} color="#fff" />
                             </TouchableOpacity>
                         </>
-                    }
+                    )}
                 </View>
 
-                <View style={ styles.ContainerHeadBody }>
-                    <ScrollView style={ { flex: 1, height: '100%', } }>
-
-                        <View style={ { alignItems: 'center', paddingTop: 25 } }>
-                            <View style={ styles.containerAvatarXL }>
+                <View style={styles.ContainerHeadBody}>
+                    <ScrollView style={{ flex: 1, height: '100%' }}>
+                        <View style={{ alignItems: 'center', paddingTop: 25 }}>
+                            <View style={styles.containerAvatarXL}>
                                 <UserAvatar
-                                    name={ `${ data.first_name } ${ data.last_name }` }
-                                    src={ data.photo }
+                                    name={`${data.first_name} ${data.last_name}`}
+                                    src={data.photo}
                                     // style={ styles.avatarXL }
-                                    size={ 80 }
-                                    borderRadius={ 40 }
+                                    size={80}
+                                    borderRadius={40}
                                 />
                             </View>
-                            <Text style={ styles.myName }>{ `${ data.first_name } ${ data.last_name }` }</Text>
+                            <Text style={styles.myName}>{`${data.first_name} ${data.last_name}`}</Text>
                         </View>
 
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <MaterialCommunityIcons name="theme-light-dark" size={ 24 } style={ styles.iconeItemMenu } color="black" />
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <MaterialCommunityIcons
+                                    name="theme-light-dark"
+                                    size={24}
+                                    style={styles.iconeItemMenu}
+                                    color="black"
+                                />
                             </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Tema</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <Ionicons name="notifications" size={ 24 } style={ styles.iconeItemMenu } color="black" />
-                            </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Notificações</Text>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Tema</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <MaterialIcons name="security" size={ 24 } style={ styles.iconeItemMenu } color="black" />
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <Ionicons name="notifications" size={24} style={styles.iconeItemMenu} color="black" />
                             </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Privacidade</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <AntDesign name="setting" size={ 24 } style={ styles.iconeItemMenu } color="black" />
-                            </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Coinfigurações da conta</Text>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Notificações</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <Ionicons name="help-circle" size={ 24 } style={ styles.iconeItemMenu } color="black" />
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <MaterialIcons name="security" size={24} style={styles.iconeItemMenu} color="black" />
                             </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Ajuda</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <Ionicons name="document-text" size={ 24 } style={ styles.iconeItemMenu } color="black" />
-                            </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Termos e política de privacidade</Text>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Privacidade</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={ styles.itemMenu } onPress={ () => navigation.push( 'Welcome' ) }>
-                            <View style={ styles.containerIconeItemMenu }>
-                                <MaterialIcons name="logout" size={ 24 } style={ styles.iconeItemMenu } color="black" />
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <AntDesign name="setting" size={24} style={styles.iconeItemMenu} color="black" />
                             </View>
-                            <View style={ styles.containerTextoItemMenu }>
-                                <Text style={ styles.textoItemMenu }>Sair da conta</Text>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Coinfigurações da conta</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <Ionicons name="help-circle" size={24} style={styles.iconeItemMenu} color="black" />
+                            </View>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Ajuda</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.itemMenu}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <Ionicons name="document-text" size={24} style={styles.iconeItemMenu} color="black" />
+                            </View>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Termos e política de privacidade</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.itemMenu} onPress={() => navigation.push('Welcome')}>
+                            <View style={styles.containerIconeItemMenu}>
+                                <MaterialIcons name="logout" size={24} style={styles.iconeItemMenu} color="black" />
+                            </View>
+                            <View style={styles.containerTextoItemMenu}>
+                                <Text style={styles.textoItemMenu}>Sair da conta</Text>
                             </View>
                         </TouchableOpacity>
                     </ScrollView>
                 </View>
-
             </View>
-            <TapGestureHandler onHandlerStateChange={ onSingleTapEvent } numberOfTaps={ 2 }>
-                <Animated.View style={ [ styles.ContainerBodyPage, animateStyles ] } >
-                    <View style={ styles.ContainerHeaderPage } >
-                        { children }
-                    </View>
+            <TapGestureHandler onHandlerStateChange={onSingleTapEvent} numberOfTaps={2}>
+                <Animated.View style={[styles.ContainerBodyPage, animateStyles]}>
+                    <View style={styles.ContainerHeaderPage}>{children}</View>
                 </Animated.View>
             </TapGestureHandler>
         </View>
@@ -177,7 +174,7 @@ const TopBar = ( { children, data } ) => {
 
 export default TopBar;
 
-const styles = StyleSheet.create( {
+const styles = StyleSheet.create({
     marginHorizontalT: {
         marginHorizontal: 5,
     },
@@ -186,7 +183,7 @@ const styles = StyleSheet.create( {
         backgroundColor: primaryColor,
     },
     ContainerBodyPage: {
-        position: "absolute",
+        position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
@@ -232,7 +229,7 @@ const styles = StyleSheet.create( {
         fontSize: 18,
         letterSpacing: 0.15,
         marginLeft: 10,
-        fontWeight: '600'
+        fontWeight: '600',
     },
     avatar: {
         width: 36,
@@ -254,12 +251,12 @@ const styles = StyleSheet.create( {
     avatarXL: {
         height: '100%',
         width: '100%',
-        borderRadius: 40
+        borderRadius: 40,
     },
     myName: {
         fontSize: 26,
         color: '#fff',
-        fontWeight: '600'
+        fontWeight: '600',
     },
     closeTopBarContainer: {
         flexDirection: 'row',
@@ -279,19 +276,15 @@ const styles = StyleSheet.create( {
         backgroundColor: '#333',
         borderRadius: 18,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     iconeItemMenu: {
-        color: '#fff'
+        color: '#fff',
     },
-    containerTextoItemMenu: {
-
-    },
+    containerTextoItemMenu: {},
     textoItemMenu: {
         fontSize: 18,
         color: '#fff',
-        fontWeight: '600'
+        fontWeight: '600',
     },
-
-} );
-
+});
