@@ -23,7 +23,7 @@ const slides = [
     {
         title: 'Prático',
         color: processColor('#BEECC4'),
-        subtitle: 'Fale Com Seu Medico',
+        subtitle: 'Fale Com Seu Medicosssss',
         description: 'Suas conversas com seus medicos em um só lugar',
         picture: require('../../images/pratico.png'),
     },
